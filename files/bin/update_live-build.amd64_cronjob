@@ -3,9 +3,11 @@
 # DISTRIBUTED BY ANSIBLE
 
 flock /tmp/update_debian.lock -c "
+  echo $$ > /tmp/update_debian.lock
+  ps -lfp $$ >> /tmp/update_debian.lock
   /usr/local/bin/update_live-build.amd64 > /var/log/update_live-build.amd64.log 2>&1
   echo $? > /var/log/update_live-build.amd64.ret
 "
-
-# Give up trying to understand flock.  Nuke the file.  Now it's unlocked.
+# Accommodate use of the same lock file by other accounts to avoid performing
+# activities during updates.
 rm -f /tmp/update_debian.lock
