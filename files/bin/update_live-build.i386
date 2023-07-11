@@ -1,7 +1,45 @@
 #!/bin/bash
 
+function main() {
+  lb clean || fail "lb clean"
+  lb config "${config_args[@]}" || fail "lb config ${config_args[@]}"
+  lb build || fail "lb build"
+}
+
+
+function fail() {
+  printf 'Error:  %s\n' "${1}" >&2
+  exit 1
+}
+
+
 cd /usr/local/debian-live/i386/debian-live/
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
 export DEBIAN_FRONTEND=noninteractive
-lb clean && lb build
+
+config_args=(
+  --architectures 
+  "i386"
+  --archive-areas 
+  "main non-free contrib"
+  --binary-images netboot
+  --chroot-filesystem squashfs
+  --debconf-frontend noninteractive
+  --distribution bullseye
+  --mirror-binary http://mirrors.kernel.org/debian/
+  --mirror-binary-security http://security.debian.org
+  --mirror-bootstrap http://mirrors.kernel.org/debian/
+  --mirror-chroot-security http://security.debian.org/
+  --parent-mirror-binary http://mirrors.kernel.org/debian/
+  --parent-mirror-binary-security http://security.debian.org
+  --parent-mirror-bootstrap http://mirrors.kernel.org/debian/
+  --parent-mirror-chroot-security http://security.debian.org/
+  --apt-options
+  "--force-yes --yes "
+  --bootappend-live
+  "keyboard-layouts=en"
+)
+
+
+main
