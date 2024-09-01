@@ -77,10 +77,11 @@ install_files:
     mode:               '0755'  
     src:                "files/bin/update_live-build.i386_cronjob"
     dest:               '/usr/local/bin/update_live-build.i386_cronjob'
+template_files:
   - owner:              'root'
     group:              'root'
     mode:               '0644'
-    src:                "../../inventory/hosts/{{ inventory_hostname }}/files/cron.d/update_live-build"
+    src:                'templates/cron.d/update_live-build.j2'
     dest:               '/etc/cron.d/update_live-build'
 symlinks:
   - owner:              'root'
