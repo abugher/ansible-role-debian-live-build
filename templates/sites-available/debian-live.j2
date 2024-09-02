@@ -1,8 +1,8 @@
 server {
   listen                        80;
-  server_name                   {{ inventory_hostname }} {{ inventory_hostname }}.{{ domain }};
+  server_name                   {{ inventory_hostname }} {{ inventory_hostname }}.{{ domain }} {{ hostvars[inventory_hostname]['ip_address'] }};
 
-  location /public/debian-live {
+  location /debian-live {
     alias                       /usr/local/debian-live/;
     autoindex                   on;
     try_files                   $uri $uri/ =404;
