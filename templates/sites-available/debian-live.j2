@@ -1,6 +1,6 @@
 server {
   listen                        80;
-  server_name                   {{ inventory_hostname }} {{ inventory_hostname }}.{{ domain }} {{ hostvars[inventory_hostname]['ip_address'] }};
+  server_name                   {{ inventory_hostname }} {{ inventory_hostname }}.{{ domain }} {{ hostvars[inventory_hostname]['ip_address'] }}{% for domain_alias in domain_aliases %} {{ inventory_hostname }}.{{ domain_alias }}{% endfor %};
 
   location /debian-live {
     alias                       /usr/local/debian-live/;
